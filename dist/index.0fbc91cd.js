@@ -677,12 +677,14 @@ new (0, _p5Default.default)((sk)=>{
                 x: city.x,
                 y: city.y
             });
+            let currentWind = sk.map(city.wind, 0, 100, 2, 50);
+            console.log(city.name, city.wind);
             // Get the last point in the lines array
             const lastPoint = city.lines[city.lines.length - 1];
             // Randomly update the position of the next point
             const nextPoint = {
-                x: lastPoint.x + sk.random(-8, 8),
-                y: lastPoint.y + sk.random(-8, 8)
+                x: lastPoint.x + sk.random(-currentWind, currentWind),
+                y: lastPoint.y + sk.random(-currentWind, currentWind)
             };
             noiseTime += 0.1;
             // Add the new point to the lines array
@@ -712,6 +714,7 @@ new (0, _p5Default.default)((sk)=>{
                 lon: coords.longitude,
                 lines: [],
                 temp: weatherData.current_weather.temperature,
+                wind: weatherData.current_weather.windspeed,
                 x: pos.x,
                 y: pos.y,
                 color: tempToColor(weatherData.current_weather.temperature)
@@ -739,6 +742,7 @@ new (0, _p5Default.default)((sk)=>{
     async function fetchWeather(latitude, longitude) {
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
         const data = await response.json();
+        console.log("Weather response:", data); // Debugging line
         return data;
     }
 });
