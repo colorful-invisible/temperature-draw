@@ -97,10 +97,13 @@ new p5((sk) => {
 
       sk.line(lastPoint.x, lastPoint.y, nextPoint.x, nextPoint.y);
 
-      // sk.push();
-      // sk.noStroke();
+      sk.push();
+      sk.stroke(0);
+      sk.fill(city.color[0], city.color[1], city.color[2]);
+      sk.ellipse(city.x, city.y, 10, 10);
       // sk.text(city.name + " " + city.temp, city.x, city.y);
-      // sk.pop();
+
+      sk.pop();
 
       if (city.lines.length > 120) {
         city.lines.shift();
