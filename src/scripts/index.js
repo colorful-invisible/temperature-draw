@@ -48,6 +48,8 @@ new p5((sk) => {
   sk.setup = () => {
     sk.createCanvas(sk.windowWidth, sk.windowHeight);
     sk.background("white");
+    sk.textSize(16);
+    sk.textAlign(sk.CENTER, sk.CENTER);
 
     // Add input field and button dynamically
     const input = sk.createInput();
@@ -91,11 +93,14 @@ new p5((sk) => {
 
       noiseTime += 0.1;
 
-      // Add the new point to the lines array
       city.lines.push(nextPoint);
 
-      // Draw the line from the last point to the new point
       sk.line(lastPoint.x, lastPoint.y, nextPoint.x, nextPoint.y);
+
+      // sk.push();
+      // sk.noStroke();
+      // sk.text(city.name + " " + city.temp, city.x, city.y);
+      // sk.pop();
 
       if (city.lines.length > 120) {
         city.lines.shift();
@@ -133,7 +138,7 @@ new p5((sk) => {
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`
       );
       const data = await response.json();
-      console.log("Geocoding response:", data); // Debugging line
+      console.log("Geocoding response:", data);
       if (data.results && data.results.length > 0) {
         const result = data.results[0];
         return { latitude: result.latitude, longitude: result.longitude };
@@ -141,17 +146,21 @@ new p5((sk) => {
         return null;
       }
     } catch (error) {
-      console.error("Error fetching coordinates:", error);
+      console.error("Error fetching coordinates data:", error);
       return null;
     }
   }
 
   async function fetchWeather(latitude, longitude) {
-    const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
-    );
-    const data = await response.json();
-    console.log("Weather response:", data); // Debugging line
-    return data;
+    try {
+      const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      return null;
+    }
   }
 });
