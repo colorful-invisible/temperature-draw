@@ -664,7 +664,6 @@ new (0, _p5Default.default)((sk)=>{
         const currentTime = sk.millis();
         cities.forEach((city)=>{
             if (currentTime - city.addedTime < 10000) {
-                // draw the ellipse just for ten seconds after each city is added
                 sk.push();
                 sk.fill(0);
                 sk.noStroke();
