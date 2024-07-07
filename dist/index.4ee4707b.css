@@ -1,3 +1,4 @@
+@import "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap";
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,5 +22,58 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+#input-wrapper {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: .75rem;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+#input-wrapper input {
+  font-optical-sizing: auto;
+  color: #000;
+  border: none;
+  border-bottom: 2px solid #000;
+  width: 20%;
+  padding: .15rem .35rem;
+  font-family: EB Garamond, Times New Roman, Times, serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+#input-wrapper input::placeholder {
+  color: #a9a9a9;
+}
+
+#input-wrapper input:focus {
+  background-color: #f2f2f2;
+  outline: none;
+}
+
+#input-wrapper button {
+  color: #000;
+  text-transform: uppercase;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 2px solid #000;
+  height: auto;
+  padding: .15rem .35rem;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: .75rem;
+  transition: background-color .3s, color .3s;
+}
+
+#input-wrapper button:hover {
+  color: #fff;
+  background-color: #000;
 }
 /*# sourceMappingURL=index.4ee4707b.css.map */

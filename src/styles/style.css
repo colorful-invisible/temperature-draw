@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -21,4 +23,62 @@ canvas {
   top: 0;
   left: 0;
   z-index: -1;
+}
+
+#input-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+
+  padding: 1rem;
+}
+
+#input-wrapper input {
+  width: 20%;
+  padding: 0.15rem 0.35rem;
+  font-family: "EB Garamond", "Times New Roman", Times, serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+  color: black;
+  font-size: 1.25rem;
+
+  border: none;
+  border-bottom: 2px solid black;
+}
+
+#input-wrapper input::placeholder {
+  color: darkgray;
+}
+
+#input-wrapper input:focus {
+  outline: none;
+  background-color: #f2f2f2;
+}
+
+#input-wrapper button {
+  height: auto;
+  padding: 0.15rem 0.35rem;
+  background-color: white;
+  border-bottom: 2px solid black;
+
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;
+  color: black;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#input-wrapper button:hover {
+  background-color: black;
+  color: white;
 }
