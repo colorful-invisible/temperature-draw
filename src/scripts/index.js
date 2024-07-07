@@ -56,7 +56,17 @@ new p5((sk) => {
   };
 
   sk.draw = () => {
+    const currentTime = sk.millis();
+
     cities.forEach((city) => {
+      if (currentTime - city.addedTime < 10000) {
+        sk.push();
+        sk.fill(0);
+        sk.noStroke();
+        sk.ellipse(city.x, city.y, 10, 10);
+        sk.pop();
+      }
+
       sk.stroke(city.color[0], city.color[1], city.color[2], 50);
       sk.strokeWeight(4);
 
@@ -98,6 +108,7 @@ new p5((sk) => {
         x: pos.x,
         y: pos.y,
         color: tempToColor(weatherData.current_weather.temperature),
+        addedTime: sk.millis(),
       };
       cities.push(city);
       console.log(cities);

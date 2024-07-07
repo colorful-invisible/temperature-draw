@@ -661,7 +661,16 @@ new (0, _p5Default.default)((sk)=>{
         });
     };
     sk.draw = ()=>{
+        const currentTime = sk.millis();
         cities.forEach((city)=>{
+            if (currentTime - city.addedTime < 10000) {
+                // draw the ellipse just for ten seconds after each city is added
+                sk.push();
+                sk.fill(0);
+                sk.noStroke();
+                sk.ellipse(city.x, city.y, 10, 10);
+                sk.pop();
+            }
             sk.stroke(city.color[0], city.color[1], city.color[2], 50);
             sk.strokeWeight(4);
             if (city.lines.length === 0) city.lines.push({
@@ -702,7 +711,8 @@ new (0, _p5Default.default)((sk)=>{
                 wind: weatherData.current_weather.windspeed,
                 x: pos.x,
                 y: pos.y,
-                color: tempToColor(weatherData.current_weather.temperature)
+                color: tempToColor(weatherData.current_weather.temperature),
+                addedTime: sk.millis()
             };
             cities.push(city);
             console.log(cities);
