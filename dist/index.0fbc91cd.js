@@ -641,6 +641,30 @@ new (0, _p5Default.default)((sk)=>{
             color: sk.color(75, 0, 130)
         }
     ];
+    // THERMAL CAMERA
+    // const colors = [
+    //   { temp: -30, color: sk.color(0, 0, 0) }, // Black
+    //   { temp: -20, color: sk.color(0, 0, 128) }, // Dark Blue
+    //   { temp: -10, color: sk.color(0, 128, 255) }, // Light Blue
+    //   { temp: 0, color: sk.color(128, 0, 255) }, // Light Purple
+    //   { temp: 10, color: sk.color(139, 0, 139) }, // Dark Purple
+    //   { temp: 20, color: sk.color(255, 0, 0) }, // Red
+    //   { temp: 30, color: sk.color(255, 69, 0) }, // Light Red
+    //   { temp: 40, color: sk.color(255, 165, 0) }, // Orange
+    //   { temp: 50, color: sk.color(255, 255, 0) }, // Yellow
+    // ];
+    // COLOR WHEEL
+    // const colors = [
+    //   { temp: -30, color: sk.color(0, 255, 255) }, // Cyan
+    //   { temp: -20, color: sk.color(0, 128, 255) }, // Medium Blue
+    //   { temp: -10, color: sk.color(0, 0, 255) }, // Blue
+    //   { temp: 0, color: sk.color(128, 0, 255) }, // Purple-Blue
+    //   { temp: 10, color: sk.color(255, 0, 255) }, // Purple
+    //   { temp: 20, color: sk.color(255, 0, 128) }, // Reddish Purple
+    //   { temp: 30, color: sk.color(255, 0, 0) }, // Red
+    //   { temp: 40, color: sk.color(255, 69, 0) }, // Light Red
+    //   { temp: 50, color: sk.color(255, 0, 0) }, // Red (0 degrees)
+    // ];
     function tempToColor(temp) {
         for(let i = 0; i < colors.length - 1; i++){
             const c1 = colors[i];
