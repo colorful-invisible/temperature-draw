@@ -589,6 +589,9 @@ var _p5 = require("p5");
 var _p5Default = parcelHelpers.interopDefault(_p5);
 new (0, _p5Default.default)((sk)=>{
     let cities = [];
+    let drawCanvas;
+    let infoCanvas;
+    let isInfoVisible = false;
     // Mercator projection bounds
     const minLat = -90;
     const maxLat = 90;
@@ -641,30 +644,6 @@ new (0, _p5Default.default)((sk)=>{
             color: sk.color(75, 0, 130)
         }
     ];
-    // THERMAL CAMERA
-    // const colors = [
-    //   { temp: -30, color: sk.color(0, 0, 0) }, // Black
-    //   { temp: -20, color: sk.color(0, 0, 128) }, // Dark Blue
-    //   { temp: -10, color: sk.color(0, 128, 255) }, // Light Blue
-    //   { temp: 0, color: sk.color(128, 0, 255) }, // Light Purple
-    //   { temp: 10, color: sk.color(139, 0, 139) }, // Dark Purple
-    //   { temp: 20, color: sk.color(255, 0, 0) }, // Red
-    //   { temp: 30, color: sk.color(255, 69, 0) }, // Light Red
-    //   { temp: 40, color: sk.color(255, 165, 0) }, // Orange
-    //   { temp: 50, color: sk.color(255, 255, 0) }, // Yellow
-    // ];
-    // COLOR WHEEL
-    // const colors = [
-    //   { temp: -30, color: sk.color(0, 255, 255) }, // Cyan
-    //   { temp: -20, color: sk.color(0, 128, 255) }, // Medium Blue
-    //   { temp: -10, color: sk.color(0, 0, 255) }, // Blue
-    //   { temp: 0, color: sk.color(128, 0, 255) }, // Purple-Blue
-    //   { temp: 10, color: sk.color(255, 0, 255) }, // Purple
-    //   { temp: 20, color: sk.color(255, 0, 128) }, // Reddish Purple
-    //   { temp: 30, color: sk.color(255, 0, 0) }, // Red
-    //   { temp: 40, color: sk.color(255, 69, 0) }, // Light Red
-    //   { temp: 50, color: sk.color(255, 0, 0) }, // Red (0 degrees)
-    // ];
     function tempToColor(temp) {
         for(let i = 0; i < colors.length - 1; i++){
             const c1 = colors[i];
@@ -678,24 +657,33 @@ new (0, _p5Default.default)((sk)=>{
     }
     sk.setup = ()=>{
         sk.createCanvas(sk.windowWidth, sk.windowHeight);
-        sk.background("white");
+        drawCanvas = sk.createGraphics(sk.windowWidth, sk.windowHeight);
+        infoCanvas = sk.createGraphics(sk.windowWidth, sk.windowHeight);
         document.getElementById("add-city-btn").addEventListener("click", addCity);
-        document.getElementById("city").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") addCity();
+        document.getElementById("city-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                addCity();
+                event.preventDefault();
+            }
+        });
+        document.addEventListener("keypress", function(event) {
+            if (event.key === "i" || event.key === "I") isInfoVisible = !isInfoVisible;
         });
     };
     sk.draw = ()=>{
+        sk.clear();
+        infoCanvas.clear();
         const currentTime = sk.millis();
         cities.forEach((city)=>{
             if (currentTime - city.addedTime < 10000) {
-                sk.push();
-                sk.fill(0);
-                sk.noStroke();
-                sk.ellipse(city.x, city.y, 10, 10);
-                sk.pop();
+                drawCanvas.push();
+                drawCanvas.fill(city.color[0], city.color[1], city.color[2]);
+                drawCanvas.noStroke();
+                drawCanvas.ellipse(city.x, city.y, 10, 10);
+                drawCanvas.pop();
             }
-            sk.stroke(city.color[0], city.color[1], city.color[2], 50);
-            sk.strokeWeight(4);
+            drawCanvas.stroke(city.color[0], city.color[1], city.color[2], 50);
+            drawCanvas.strokeWeight(4);
             if (city.lines.length === 0) city.lines.push({
                 x: city.x,
                 y: city.y
@@ -707,7 +695,7 @@ new (0, _p5Default.default)((sk)=>{
                 y: lastPoint.y + sk.random(-currentWind, currentWind)
             };
             city.lines.push(nextPoint);
-            sk.line(lastPoint.x, lastPoint.y, nextPoint.x, nextPoint.y);
+            drawCanvas.line(lastPoint.x, lastPoint.y, nextPoint.x, nextPoint.y);
             if (city.lines.length > 120) {
                 city.lines.shift();
                 city.lines = [
@@ -717,10 +705,26 @@ new (0, _p5Default.default)((sk)=>{
                     }
                 ];
             }
+            if (isInfoVisible) {
+                infoCanvas.push();
+                infoCanvas.fill(0);
+                infoCanvas.noStroke();
+                infoCanvas.ellipse(city.x, city.y, 10, 10);
+                infoCanvas.textAlign(sk.CENTER, sk.CENTER);
+                infoCanvas.textSize(12);
+                infoCanvas.text(city.name.toUpperCase(), city.x, city.y + 15);
+                infoCanvas.text(`${city.temp}\xb0C`, city.x, city.y + 30);
+                infoCanvas.text(` ${city.wind} km/h`, city.x, city.y + 45);
+                infoCanvas.pop();
+            }
         });
+        sk.image(drawCanvas, 0, 0);
+        if (isInfoVisible) sk.image(infoCanvas, 0, 0);
     };
     async function addCity() {
-        const cityName = document.getElementById("city").value;
+        const cityInput = document.getElementById("city-input");
+        const cityName = cityInput.value.trim();
+        if (cityName === "") return;
         const coords = await getCoordinates(cityName);
         if (coords) {
             const weatherData = await fetchWeather(coords.latitude, coords.longitude);
@@ -739,6 +743,7 @@ new (0, _p5Default.default)((sk)=>{
             };
             cities.push(city);
             console.log(cities);
+            cityInput.value = "";
         } else alert("City not found.");
     }
     async function getCoordinates(city) {
